@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/pjankovsky/tg-search-amazon-terms/issues"
   },
-  "homepage": "https://github.com/pjankovsky/tg-search-amazon-terms#readme"
+  "homepage": "https://github.com/pjankovsky/tg-search-amazon-terms#readme",
+  "dependencies": {
+    "aws-sdk": "^2.3.14",
+    "tg-node-lib": "github:pjankovsky/tg-node-lib"
+  }
 }
