@@ -1,0 +1,19 @@
+{
+  "name": "tg-search-amazon-terms",
+  "version": "1.0.0",
+  "description": "Use the Amazon Product Advertising API to scrape ASINs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pjankovsky/tg-search-amazon-terms.git"
+  },
+  "author": "Peter Jankovsky <peter@jankovsky.me>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pjankovsky/tg-search-amazon-terms/issues"
+  },
+  "homepage": "https://github.com/pjankovsky/tg-search-amazon-terms#readme"
+}
