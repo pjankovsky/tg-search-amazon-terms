@@ -1,7 +1,7 @@
 (function () {
     "use strict";
     let aws = require('aws-sdk');
-    let dynamodb = new aws.DynamoDB();
+    let dynamodb = new aws.DynamoDB({apiVersion: '2012-08-10'});
 
     const TABLE_NAME = 'TokenGoodsConfig';
 
