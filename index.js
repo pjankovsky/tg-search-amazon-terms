@@ -12,40 +12,11 @@ let AWS = require('aws-sdk');
 let SQS = new AWS.SQS({apiVersion: '2012-11-05'});
 let http = require('http');
 let querystring = require('querystring');
-let cypto = require('crypto');
 let parseString = require('xml2js').parseString;
+let amazonSignature = require('tg-node-lib/lib/amazonSignature');
 
 // numbers that need to be reset
 let timeout = 0;
-
-function leftTwoPadZero(value) {
-    value = String(value);
-    while (value.length < 2)
-        value = '0' + value;
-    return value;
-}
-
-function getSigningTimestamp() {
-    var date = new Date();
-    return date.getUTCFullYear() +
-        '-' + leftTwoPadZero(date.getUTCMonth() + 1) +
-        '-' + leftTwoPadZero(date.getUTCDate()) +
-        'T' + leftTwoPadZero(date.getUTCHours()) +
-        ':' + leftTwoPadZero(date.getUTCMinutes()) +
-        ':' + leftTwoPadZero(date.getUTCSeconds()) +
-        'Z';
-}
-
-function getSignature(method, hostname, path, querystring) {
-    var stringToSign = method +
-        "\n" + hostname +
-        "\n" + path +
-        "\n" + querystring;
-
-    var hmac = cypto.createHmac('sha256', AWS_SECRET_KEY)
-    hmac.update(stringToSign);
-    return hmac.digest('base64');
-}
 
 function addToLookupQueue(asin) {
     console.log('----- Queue ASIN');
@@ -64,7 +35,7 @@ function addToLookupQueue(asin) {
 function search(params) {
     console.log('---- Call Amazon');
     delete params.Signature;
-    params.Signature = getSignature('GET', SEARCH_HOSTNAME, SEARCH_PATH, querystring.stringify(params));
+    params.Signature = amazonSignature.getSignature('GET', SEARCH_HOSTNAME, SEARCH_PATH, querystring.stringify(params), AWS_SECRET_KEY);
 
     return new Promise((resolve, reject) => {
         var req = http.request({
@@ -135,7 +106,7 @@ function performSearch(body) {
             SearchIndex: body.index || 'All',
             Service: 'AWSECommerceService',
             Sort: 'salesrank',
-            Timestamp: getSigningTimestamp()
+            Timestamp: amazonSignature.getSigningTimestamp()
         };
 
         if (params.SearchIndex == 'All')
