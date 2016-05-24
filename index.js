@@ -19,7 +19,7 @@ let amazonSignature = require('tg-node-lib/lib/amazonSignature');
 let timeout = 0;
 
 function addToLookupQueue(asin) {
-    console.log('----- Queue ASIN');
+    console.log('----- Queue ASIN -> ' + asin);
     return new Promise((resolve, reject) => {
         SQS.sendMessage({
             MessageBody: asin,
@@ -91,10 +91,10 @@ function search(params) {
 }
 
 function performSearch(body) {
-    console.log('--- Search Term');
+    console.log('--- Search Term -> ' + body);
     body = JSON.parse(body);
     return new Promise((resolve, reject) => {
-        // A-Z a-z sort is helpful for the signature
+        // A-Z a-z sort is required for the signature
         let params = {
             AWSAccessKeyId: AWS_ACCESS_KEY, // first because upper case is before lower case
             AssociateTag: 'tokengoods-20',
@@ -129,13 +129,12 @@ function deleteMessage(Message) {
 }
 
 function poll() {
-    console.log('-- Start Poll');
+    console.log('-- Poll Queue');
     return new Promise((resolve, reject) => {
         SQS.receiveMessage({
             QueueUrl: TERM_QUEUE_URL,
-            MaxNumberOfMessages: 1,
-            // MaxNumberOfMessages: 10,
-            WaitTimeSeconds: 0
+            MaxNumberOfMessages: 10,
+            WaitTimeSeconds: 1
         }, (err, data) => {
             if (err)
                 return reject(err);
@@ -176,6 +175,6 @@ function poll() {
 }
 
 exports.handler = (event, context, callback) => {
-    timeout = Date.now() + 270000; // 4m30s
+    timeout = Date.now() + 300000; // 5m
     poll().then((res) => callback(null, res)).catch((err) => callback(err, null));
 };
