@@ -175,6 +175,6 @@ function poll() {
 }
 
 exports.handler = (event, context, callback) => {
-    timeout = Date.now() + 300000; // 5m
+    timeout = Date.now() + 285000; // 4m45
     poll().then((res) => callback(null, res)).catch((err) => callback(err, null));
 };
