@@ -35,7 +35,7 @@ function addToLookupQueue(asin) {
 function search(params) {
     console.log('---- Call Amazon');
     delete params.Signature;
-    params.Signature = amazonSignature.getSignature('GET', SEARCH_HOSTNAME, SEARCH_PATH, querystring.stringify(params), AWS_SECRET_KEY);
+    params.Signature = amazonSignature.getSignature('GET', SEARCH_HOSTNAME, SEARCH_PATH, params, AWS_SECRET_KEY);
 
     return new Promise((resolve, reject) => {
         var req = http.request({
