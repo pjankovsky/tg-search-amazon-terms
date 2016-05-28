@@ -202,7 +202,8 @@
                                     else if (_images[i].$.Category == 'variant')
                                         variants.push(_images[i].LargeImage.URL);
                                 }
-                                variants.unshift(primary);
+                                if (primary != '')
+                                    variants.unshift(primary);
                                 product.newImages = variants;
                                 // load up the old images
                                 return product.getImages();
